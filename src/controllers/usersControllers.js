@@ -35,9 +35,31 @@ const postNewUser = (req, res) => {
   res.json(newUser);
 };
 
+const updateUser = (req, res) => {
+  // * Setting userID value equal to the request parameter from user.
+  const userID = +req.params.id;
+  // * Setting update request from body to a variable.
+  const body = req.body;
+  // * Finding the user to be updated.
+  const requestedUser = usersData.find((user) => user.id === +userID);
+  // * Setting the index value of the requested user in the data to a variable.
+  const index = usersData.indexOf(requestedUser);
+  if (!requestedUser) {
+    res.status(404).send('User cannot be found.');
+  } else {
+    // * Using spread operator to unpack the user and body so the user can be
+    // * updated based on the body's values.
+    const updatedUser = { ...requestedUser, ...body };
+    // * Updating the usersData at the position of the requested user and
+    // * inserting the updatedUser object.
+    usersData[index] = updatedUser;
+    res.send(updatedUser);
+  }
+};
 //* Exporting route functions
 module.exports = {
   getUsers,
   getUsersByID,
   postNewUser,
+  updateUser,
 };
