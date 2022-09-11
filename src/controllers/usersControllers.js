@@ -56,10 +56,28 @@ const updateUser = (req, res) => {
     res.send(updatedUser);
   }
 };
+
+const deleteUser = (req, res) => {
+  // * Setting userID value equal to the request parameter from user.
+  const userID = +req.params.id;
+  // const requestedUser = usersData.find((user) => user.id === +userID);
+  // const requestedUserName = requestedUser.name;
+  // * Creating a new array that includes everything accept for the one with the
+  // *  requested ID.
+  const newUsersData = usersData.filter((user) => user.id !== userID);
+
+  if (newUsersData.length === usersData.length) {
+    res.status(404).send('User not found.');
+  } else {
+    res.send(`User ID: ${userID} has been successfully deleted.`);
+    usersData = newUsersData;
+  }
+};
 //* Exporting route functions
 module.exports = {
   getUsers,
   getUsersByID,
   postNewUser,
   updateUser,
+  deleteUser,
 };
