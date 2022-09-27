@@ -3,6 +3,7 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 
 //* Importing Controllers
+//* Destructuring imported object to give each function it's own variable name.
 const {
   getUsers,
   getUsersByID,
