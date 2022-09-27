@@ -201,21 +201,40 @@ const updateUser = (req, res) => {
   });
 };
 
+// * This function will delete a user based on the client's request.
+
+// * We will use the path parameter to confirm the user that needs to be
+// * deleted.
+
+// * We will send the response with the number of rows deleted.
+
 const deleteUser = (req, res) => {
-  // // * Setting userID value equal to the request parameter from user.
-  // const userID = +req.params.id;
-  // // const requestedUser = usersData.find((user) => user.id === +userID);
-  // // const requestedUserName = requestedUser.name;
-  // // * Creating a new array that includes everything accept for the one with the
-  // // *  requested ID.
-  // const newUsersData = usersData.filter((user) => user.id !== userID);
-  // if (newUsersData.length === usersData.length) {
-  //   res.status(404).send('User not found.');
-  // } else {
-  //   res.send(`User ID: ${userID} has been successfully deleted.`);
-  //   usersData = newUsersData;
-  // }
+  // * Creating a variable to store the path parameter.
+  // * We will use this in the sqlQuery below to make the query dynamic base on
+  // *  the user's input.
+  const userID = req.params.id;
+  // * If userID is falsy (null, undefined, ''), which means the user is not
+  // * sending an ID, send a 400 status code and exit the function.
+  if (!userID) {
+    res.sendStatus(400);
+    return;
+  }
+  // * Storing the SQL query to a variable.
+  // # Using parameterized SQL statements.
+  const sqlQuery = 'DELETE FROM users WHERE user_id = ?';
+  const params = [userID];
+  db.query(sqlQuery, params, (err, rows) => {
+    if (err) {
+      console.log('The deleteUser route failed', err);
+      res.sendStatus(500); // # Sending 500 because error likely will originate from the backend.
+    } else {
+      console.log(`Number of records deleted: ${rows.affectedRows}`);
+      // * Sending the number of rows that have been deleted
+      res.json(rows.affectedRows);
+    }
+  });
 };
+
 //* Exporting route functions
 module.exports = {
   getUsers,

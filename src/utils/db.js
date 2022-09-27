@@ -1,5 +1,8 @@
 const mysql = require('mysql');
 
+// * Creating a connection variable to store the mysql database connection.
+// * Using process.env to access variable in .env file that stores private login
+// * credentials.
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
