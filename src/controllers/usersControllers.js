@@ -154,21 +154,25 @@ const updateUser = (req, res) => {
   // * We will use this in the sqlQuery below to make the query dynamic base on
   // *  the user's input.
   const userID = req.params.id;
+  console.log(userID);
   // * If userID is falsy (null, undefined, ''), which means the user is not
   // * sending an ID, send a 400 status code and exit the function.
   if (!userID) {
+    console.log(`You got a stupid error.`);
     res.sendStatus(400);
     return;
   }
   // * Storing the SQL query to a variable.
   // # Using parameterized SQL statements.
   const sqlQuery = 'UPDATE users SET ? WHERE user_id = ?';
-
+  // * Running the query using the req.body as a parameterized query.
   db.query(sqlQuery, [req.body, userID], (err, rows) => {
     if (err) {
       console.log(`The updateUser route was not successful: ${err}`);
       res.sendStatus(500); // # Sending 500 because error likely will originate from the backend.
     } else {
+      // * Running another query that makes use of the user ID to show the
+      // *  updated response object.
       const resSqlQuery = `select user_id, first_name, last_name, job_title, email, phone, pay_rate, username, user_password from users where user_id = ?`;
       // # Saving params array as a variable.
       const resParams = [userID];

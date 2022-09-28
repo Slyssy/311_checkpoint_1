@@ -8,7 +8,7 @@ const port = process.env.PORT || 4000;
 
 //* middleware
 app.use(express.json());
-// app.use(express.urlencoded());
+app.use(express.static('./public'));
 
 //* Importing Routers
 const userRoutes = require('./src/routes/usersRoutes');
